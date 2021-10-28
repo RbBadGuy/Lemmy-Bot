@@ -1,11 +1,11 @@
-//----Dont-Change-Unless-Know-To----\\
+//-Start Bot---Dont-Change-Unless-Know-To----\\
 const Discord = require('discord.js');
 
 const bot = new Discord.Client();
 
 const Levels = require('discord-xp')
 
-Levels.setURL("mongodb+srv://RbBadGuy:1374123412viS@testsubject.e0lmh.mongodb.net/Data")
+//Levels.setURL("mongodb+srv://RbBadGuy:1374123412viS@testsubject.e0lmh.mongodb.net/Data")
 
 const superagent = require("superagent")
 
@@ -39,8 +39,7 @@ bot.on('ready', () => {
     bot.user.setActivity('For Help Prefix is: -', { type: "WATCHING" }).catch(console.error)
 })
 //-----Bot-Main-Login-----\\
-
-bot.login(process.env.token);
+bot.login(token);
 //----------------------Welcome_Embeded--------------------------------------------
 bot.on('guildMemberAdd', async member => {
     let channel = bot.channels.cache.get("897391132982521867")
@@ -52,7 +51,6 @@ bot.on('guildMemberAdd', async member => {
     .setImage("https://cdn.discordapp.com/attachments/897391803458797579/902890738377961522/welcome-poster-spectrum-brush-strokes-260nw-1146069941.png")
     channel.send(embed)
 })
-
 //----------------------Commands-DangerZone----------------------------------------
 
 bot.on("message", async message => {
@@ -127,36 +125,3 @@ bot.on('message', message => {
     bot.commands.get('endticket').execute(bot, message, args);
   }
 });
-
-bot.on("message", async message => {
-    if (!message.guild) return;
-    if (message.author.bot) return;
-
-    const args = message.content.slice(prefix.length).trim().split(/ +/g);
-    const command = args.shift().toLowerCase();
-
-    const randomXp = Math.floor(Math.random() * 9) + 1; //Random amont of XP until the number you want + 1
-    const hasLeveledUp = await Levels.appendXp(message.author.id, message.guild.id, randomXp);
-    if (hasLeveledUp) {
-        const user = await Levels.fetch(message.author.id, message.guild.id);
-        message.channel.send(`You leveled up to ${user.level}! Keep it going!`);
-    }
-    
-    //Rank
-    if(command === "rank") {
-        const user = await Levels.fetch(message.author.id, message.guild.id);
-        message.channel.send(`You are currently level **${user.level}**!`)
-    }
-    
-    //Leaderboard
-    if(command === "leaderboard" || command === "lb") {
-        const rawLeaderboard = await Levels.fetchLeaderboard(message.guild.id, 5);
-        if (rawLeaderboard.length < 1) return reply("Nobody's in leaderboard yet.");
-
-        const leaderboard = Levels.computeLeaderboard(bot, rawLeaderboard); 
-
-        const lb = leaderboard.map(e => `${e.position}. ${e.username}#${e.discriminator}\nLevel: ${e.level}\nXP: ${e.xp.toLocaleString()}`);
-
-        message.channel.send(`${lb.join("\n\n")}}`)
-    }
-})
