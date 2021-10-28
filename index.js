@@ -11,6 +11,8 @@ const superagent = require("superagent")
 
 const mongoose = require('mongoose')
 
+const { token } = require('./config.json');
+
 const { readdirSync, read } = require('fs');
 
 const { join } = require('path');
@@ -121,6 +123,8 @@ bot.on('message', message => {
      message.channel.send('i am not lemmy i am meme')
   } else if (command == 'ticket'){
     bot.commands.get('ticket').execute(bot, message, args);
+  }else if (command == 'closeticket'){
+    bot.commands.get('endticket').execute(bot, message, args);
   }
 });
 
