@@ -1,3 +1,12 @@
+const express = require('express')
+const app = express();
+const port = 3000
+
+app.get('/', (req, res) => res.send('Good Now Its Working'))
+
+app.listen(port, () =>
+console.log(`Your app is listening a http://localhost:${port}`)
+);
 //-Start Bot---Dont-Change-Unless-Know-To----\\
 const Discord = require('discord.js');
 
